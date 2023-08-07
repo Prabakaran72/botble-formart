@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% block content %}
+    {% endblock %}
+</head>
+<body>
+    <div class="axisubs-block wrap">
+        <header class="">
+            {% include '@Axisubs/Admin/header/header.twig' %}
+        </header>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="">
+                    <div id="content">
+                        {% block body %}{% endblock %}
+                    </div>
+                </div>
+                {#<div class="col-md-4">#}
+                    {#{% include '@Axisubs/Admin/extras/support.twig' %}#}
+                    {#<div class="axisubs-promo-slidebar">#}
+                        {#<iframe src="http://demo.flycart.org/updates/axisubs-wp.html" width="300" height="800"></iframe>#}
+                    {#</div>#}
+                {#</div>#}
+            </div>
+        </div>
+        <div id="footer">
+            {% block footer %}
+
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

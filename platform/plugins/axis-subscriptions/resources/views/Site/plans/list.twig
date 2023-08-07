@@ -1,0 +1,66 @@
+<div class="axisubs wrap">
+    {{ message | raw }}
+    <form method="post" action="?p_id=1">
+        <div class="axisubs-plans">
+            <div class="axisubs-plans-lists">
+                {% for item in items %}
+                    <div class="axisubs-plans-con">
+                        <div class="axisubs-plans-con-i">
+                            <div class="axisubs-plan-title">
+                                <h3>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</h3>
+                                <span class="axisubs-price-text">
+                                    {% if item['meta'][item['ID']~'_axisubs_plans_price'] > 0 %}
+                                        {{ currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_price'] }}
+                                    {% else %}
+                                        {{ currencyData['code']~'0' }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                            {% if item['meta'][item['ID']~'_axisubs_plans_setup_cost'] > 0 %}
+                                <div class="axisubs-plans-setup_cost">
+                                    <div><span class="axisubs-plans-label-block">Setup cost: </span><span class="axisubs-plans-text">{{ currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_setup_cost'] }}</span></div>
+                                </div>
+                            {% endif %}
+                            {{ item['tax_info_html'] | raw }}
+                            {% set type = item['meta'][item['ID']~'_axisubs_plans_type'] %}
+                            {% if (type == 'renewal_with_trial' or type == 'recurring_with_trial') %}
+                                {% if item['meta'][item['ID']~'_axisubs_plans_trial_period'] > 0 %}
+                                <div class="axisubs-plans-duration">
+                                    <div><span class="axisubs-plans-label-block">Trial Duration: </span>
+                                        <span class="axisubs-plans-text">
+                                            {% set trial_periodUnit = item['meta'][item['ID']~'_axisubs_plans_trial_period_units'] %}
+                                            {{ item['meta'][item['ID']~'_axisubs_plans_trial_period'] }} {{ unitInWords[trial_periodUnit] }}
+                                        </span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endif %}
+                            <div class="axisubs-plans-duration">
+                                <div><span class="axisubs-plans-label-block">Duration: </span>
+                                    <span class="axisubs-plans-text">
+                                    {% if item['meta'][item['ID']~'_axisubs_plans_period'] > 0 %}
+                                        {% set periodUnit = item['meta'][item['ID']~'_axisubs_plans_period_units'] %}
+                                        {{ item['meta'][item['ID']~'_axisubs_plans_period'] }} {{ unitInWords[periodUnit] }}
+                                    {% else %}
+                                        Forever
+                                    {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="axisubs-plans-description">
+                                <p>{{ item['meta'][item['ID']~'_axisubs_plans_description'] }}</p>
+                            </div>
+                            <div class="axisubs-plans-duration">
+                                <a class="axisubs-btn" href="{{ item['plan_url'] }}">{{ data['subscribe_btn_text'] }}</a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        No plans available.
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,330 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs axisubs-bs3 wrap">
+  <h3 class="wp-heading-inline">{{ pagetitle }}
+  </h3>
+    <div class="container-fluid">
+        <div class="row metabox-holder">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 dashboard-content">
+                <div class="dashboard-menu-cont" style="display: none">
+                    <div class="dashboard-menu-item-c">
+                        <div class="dashboard-menu-each-i-l plan-color-dark">
+                            <div class="dashboard-menu-i">
+                                <div class="dashboard-menu-img plans"></div>
+                            </div>
+                        </div>
+                        <div class="dashboard-menu-each-i-r plan-color-light">
+                            <div class="dashboard-menu-each-i">
+                                <div class="dashboard-menu-count">
+                                    {{ data['planCount'] }}
+                                </div>
+                                <div class="dashboard-menu-name">
+                                    Plans
+                                </div>
+                            </div>
+                        </div>
+                        <a href="?page=plans-index" class="dashboard-menu-a"></a>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="dashboard-menu-item-c">
+                        <div class="dashboard-menu-each-i-l subscriptions-color-dark">
+                            <div class="dashboard-menu-i">
+                                <div class="dashboard-menu-img subscriptions"></div>
+                            </div>
+                        </div>
+                        <div class="dashboard-menu-each-i-r subscriptions-color-light">
+                            <div class="dashboard-menu-each-i">
+                                <div class="dashboard-menu-count">
+                                    {{ data['subscriptionCount'] }}
+                                </div>
+                                <div class="dashboard-menu-name">
+                                    Subscriptions
+                                </div>
+                            </div>
+                        </div>
+                        <a href="?page=subscriptions-index" class="dashboard-menu-a"></a>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="dashboard-menu-item-c">
+                        <div class="dashboard-menu-each-i-l customers-color-dark">
+                            <div class="dashboard-menu-i">
+                                <div class="dashboard-menu-img customers"></div>
+                            </div>
+                        </div>
+                        <div class="dashboard-menu-each-i-r customers-color-light">
+                            <div class="dashboard-menu-each-i">
+                                <div class="dashboard-menu-count">
+                                    {{ data['customerCount'] }}
+                                </div>
+                                <div class="dashboard-menu-name">
+                                    Customers
+                                </div>
+                            </div>
+                        </div>
+                        <a href="?page=customers-index" class="dashboard-menu-a"></a>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="dashboard-menu-item-c">
+                        <div class="dashboard-menu-each-i-l config-color-dark">
+                            <div class="dashboard-menu-i">
+                                <div class="dashboard-menu-img config"></div>
+                            </div>
+                        </div>
+                        <div class="dashboard-menu-each-i-r config-color-light">
+                            <div class="dashboard-menu-each-i">
+                                <div class="dashboard-menu-count">
+                                </div>
+                                <div class="dashboard-menu-name">
+                                    Configuration
+                                </div>
+                            </div>
+                        </div>
+                        <a href="?page=config-index" class="dashboard-menu-a"></a>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="dashboard-menu-item-c">
+                        <div class="dashboard-menu-each-i-l app-color-dark">
+                            <div class="dashboard-menu-i">
+                                <div class="dashboard-menu-img app"></div>
+                            </div>
+                        </div>
+                        <div class="dashboard-menu-each-i-r app-color-light">
+                            <div class="dashboard-menu-each-i">
+                                <div class="dashboard-menu-count">
+                                    {{ data['appCount'] }}
+                                </div>
+                                <div class="dashboard-menu-name">
+                                    Apps
+                                </div>
+                            </div>
+                        </div>
+                        <a href="?page=app-index" class="dashboard-menu-a"></a>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+
+                {# Graph Starts here #}
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 dashboard-graph-con tab-container">
+                    {% if data['planCount'] > 0 %}
+                        {{ data['graph_script'] | raw }}
+                        <div class="nav-tabs-container">
+                            <ul class="nav nav-tabs">
+                                <li role="tab0" class="active tab_axisubs"><a data-toggle="tab" href="#tab0" aria-expanded="true">Weekly Sales Report</a></li>
+                                <li role="tab1" class="tab_axisubs"><a data-toggle="tab" href="#tab1" aria-expanded="false">Monthly Sales Report</a></li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="tab0">
+                                <div id="curve_chart_week" style="width: 100%; height: 500px"></div>
+                            </div>
+                            <div class="" id="tab1">
+                                <div id="curve_chart_month" style="width: 100%; height: 500px"></div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="dashboard_graph_text">
+                            Start selling your memberships to get awesome chart display
+                        </div>
+                    {% endif %}
+                </div>
+                {# Graph Ends here #}
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <h3 class="wp-heading-inline">Last 7 Subscriptions
+                    </h3>
+                    <!-- Last 7 Subscriptions -->
+                    <div class="axisubs-plans">
+                        <div class="axisubs-plan-list">
+                            <table class="wp-list-table widefat fixed striped plans">
+                                <thead>
+                                <tr>
+                                    <th scope="col" id="name" class="manage-column column-name column-primary"><span>ID</span></th>
+                                    <th scope="col" id="status" class="manage-column column-status"><span>Plan Name</span></th>
+                                    <th scope="col" id="p-slug" class="manage-column column-planslug"><span>Total Cost</span></th>
+                                    <th scope="col" id="period" class="manage-column column-period"><span>Status</span></th>
+                                </tr>
+                                </thead>
+                                <tbody id="the-list">
+                                {% for subscribe in data['last_five_subscription'] %}
+                                    {% set plan = subscribe['plan'] %}
+                                    {% set planMeta = subscribe['plan']['meta'] %}
+                                    {% set meta = subscribe['meta'] %}
+                                    <tr id="plan-1" class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                        <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                            <div class="plan_id">
+                                                <a class="" href="{{ '?page=subscriptions-index&sid='~subscribe['ID'] }}">
+                                                    {{ subscribe['ID'] }}
+                                                </a>
+                                                <button type="button" class="toggle-row"><span class="screen-reader-text">{{ esc_html_e('Show more details', 'axis-subscriptions') }}</span></button>
+                                            </div>
+                                        </td>
+                                        <td class="status column-status" data-colname="Status">
+                                            <span>{{ planMeta[plan['ID']~'_axisubs_plans_name'] }}</span>
+                                        </td>
+                                        <td class="slug column-slug" data-colname="Slug">
+                                            <span>{{ currencyData['code']~meta[subscribe['ID']~'_axisubs_subscribe_total_price'] }}</span>
+                                        </td>
+                                        <td class="period column-period" data-colname="Period">
+                                            {% set statusText = data['status_codes'] %}
+                                            <span class="axisubs-data-content">{{ statusText[meta[subscribe['ID']~'_axisubs_subscribe_status']] | raw }}</span>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="">
+                                                No subscriptions available.
+                                            </div>
+                                        <td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <h3 class="wp-heading-inline">{{ esc_html_e('Statistics', 'axis-subscriptions') }}
+                        <small>{{ esc_html_e('Only active subscriptions for which payments are made are taken into account for this statistics', 'axis-subscriptions') }}</small>
+                    </h3>
+                    <!-- Statistics -->
+                    <div class="axisubs-statistics_con">
+                        <table class="wp-list-table1 widefat fixed striped plans">
+                            <tbody id="the-list">
+                                <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                    <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                        <span>Last year</span>
+                                    </td>
+                                    <td class="status column-status" data-colname="Status">
+                                        <span>{{ data['last_year_statistics']['total'] }}</span>
+                                    </td>
+                                    <td class="slug column-slug" data-colname="Slug">
+                                        <span>{{ currencyData['code']~data['last_year_statistics']['total_income'] }}</span>
+                                    </td>
+                                </tr>
+                                <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                    <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                        <span>This year</span>
+                                    </td>
+                                    <td class="status column-status" data-colname="Status">
+                                        <span>{{ data['this_year_statistics']['total'] }}</span>
+                                    </td>
+                                    <td class="slug column-slug" data-colname="Slug">
+                                        <span>{{ currencyData['code']~data['this_year_statistics']['total_income'] }}</span>
+                                    </td>
+                                </tr>
+                                <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                    <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                        <span>Last month</span>
+                                    </td>
+                                    <td class="status column-status" data-colname="Status">
+                                        <span>{{ data['last_month_statistics']['total'] }}</span>
+                                    </td>
+                                    <td class="slug column-slug" data-colname="Slug">
+                                        <span>{{ currencyData['code']~data['last_month_statistics']['total_income'] }}</span>
+                                    </td>
+                                </tr>
+                                <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                    <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                        <span>This month</span>
+                                    </td>
+                                    <td class="status column-status" data-colname="Status">
+                                        <span>{{ data['this_month_statistics']['total'] }}</span>
+                                    </td>
+                                    <td class="slug column-slug" data-colname="Slug">
+                                        <span>{{ currencyData['code']~data['this_month_statistics']['total_income'] }}</span>
+                                    </td>
+                                </tr>
+                                <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                    <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                        <span>Last 7 Days</span>
+                                    </td>
+                                    <td class="status column-status" data-colname="Status">
+                                        <span>{{ data['last_7days_statistics']['total'] }}</span>
+                                    </td>
+                                    <td class="slug column-slug" data-colname="Slug">
+                                        <span>{{ currencyData['code']~data['last_7days_statistics']['total_income'] }}</span>
+                                    </td>
+                                </tr>
+                                <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                    <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                        <span>Yesterday</span>
+                                    </td>
+                                    <td class="status column-status" data-colname="Status">
+                                        <span>{{ data['yesterday_statistics']['total'] }}</span>
+                                    </td>
+                                    <td class="slug column-slug" data-colname="Slug">
+                                        <span>{{ currencyData['code']~data['yesterday_statistics']['total_income'] }}</span>
+                                    </td>
+                                </tr>
+                                <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                    <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                        <span>Today</span>
+                                    </td>
+                                    <td class="status column-status" data-colname="Status">
+                                        <span>{{ data['today_statistics']['total'] }}</span>
+                                    </td>
+                                    <td class="slug column-slug" data-colname="Slug">
+                                        <span>{{ currencyData['code']~data['today_statistics']['total_income'] }}</span>
+                                    </td>
+                                </tr>
+                                <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                    <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                        <span>Total active subscriptions</span>
+                                    </td>
+                                    <td class="status column-status" data-colname="Status">
+                                    </td>
+                                    <td class="slug column-slug" data-colname="Slug">
+                                        <span>{{ data['total_active_subscriptions'] }}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <input type="hidden" id="site_url" value="{{ site_url }}"/>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>jQuery(document).ready(function(){ postboxes.add_postbox_toggles(pagenow); });</script>
+    <script type="application/javascript">
+        if (typeof(axisubs) == 'undefined') {
+            var axisubs = {};
+        }
+        if (typeof(axisubs.jQuery) == 'undefined') {
+            axisubs.jQuery = jQuery.noConflict();
+        }
+        ( function ($){
+            $( document ).ready(function() {
+                $("#circle1").circliful
+                ({
+                    foregroundColor: "#3c763d",
+                    backgroundColor: "#eee",
+                    fontColor: '#3c763d',
+                    percent: {{ todayTargetPercent }},
+
+                });
+                $("#circle2").circliful
+                ({
+                    foregroundColor: "#3498DB",
+                    backgroundColor: "#eee",
+                    fontColor: '#aaa',
+                    percent: {{ totalTargetPercent }}
+            });
+                $("#circle3").circliful
+                ({
+                    foregroundColor: "#a94442",
+                    backgroundColor: "#eee",
+                    fontColor: '#a94442',
+                    percent: {{ pendingTargetPercent }}
+            });
+            });
+        })(axisubs.jQuery);
+    </script>
+{% endblock %}

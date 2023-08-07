@@ -1,0 +1,11 @@
+{
+    "id": "botble/sslcommerz",
+    "name": "SslCommerz Payment Gateway",
+    "namespace": "Botble\\SslCommerz\\",
+    "provider": "Botble\\SslCommerz\\Providers\\SslCommerzServiceProvider",
+    "author": "Santhila Databot Private Limited",
+    "url": "https://botble.com",
+    "version": "1.0.0",
+    "description": "SslCommerz payment gateway integration",
+    "require": ["botble/payment"]
+}

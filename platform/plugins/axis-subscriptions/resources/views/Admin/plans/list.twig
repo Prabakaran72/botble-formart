@@ -1,0 +1,156 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs wrap">
+    <h1 class="wp-heading-inline">{{ pagetitle }}
+    </h1>
+    <a class="page-title-action" href="?page=plans-index&task=edit">{{ esc_html_e('Add New Plan', 'axis-subscriptions') }}</a>
+    {{ data['additional_buttons'] | raw }}
+    <form method="post" action="?page=plans-index" id="axisubs_list_form">
+        <div class="plan_filter">
+            <input type="text" name="filter_name" id="filter_name" placeholder="Search by plan name" value="{{ data['filter_name'] }}"/>
+            <button class="button button-search" type="submit"><span class="dashicons dashicons-search"></span></button>
+            <button class="button" type="button" onclick="document.getElementById('filter_name').value='';this.form.submit();">Clear</button>
+        </div>
+        <div class="axisubs-message-ajax">
+        </div>
+        <div class="axisubs_title_description">
+            {{ esc_html_e('Axis Subscription plans', 'axis-subscriptions') }}
+        </div>
+        <div class="axisubs-plans">
+            <div class="axisubs-list">
+                <table class="wp-list-table widefat fixed striped plans" width="100%">
+                    <thead>
+                    <tr>
+                      <th scope="col" id="name" class="manage-column column-title column-primary"><span>{{ esc_html_e('Name', 'axis-subscriptions') }}</span></th>
+                      <th scope="col" width="15%" id="type" class="manage-column column-type"><span>{{ esc_html_e('Type', 'axis-subscriptions') }}</span></th>
+                      <th scope="col" id="period" class="manage-column column-price"><span>{{ esc_html_e('Price and Duration', 'axis-subscriptions') }}</span></th>
+                      <th scope="col" width="15%" id="status" class="manage-column column-status"><span>{{ esc_html_e('Status', 'axis-subscriptions') }}</span></th>
+                      <th scope="col" width="15%" id="action" class="manage-column column-id"><span>{{ esc_html_e('Action', 'axis-subscriptions') }}</span></th>
+                    </tr>
+                    </thead>
+                    <tbody id="the-list">
+                    {% for item in items %}
+                        {% set planMeta = item['meta'] %}
+                        {% set planPrefix = item['ID']~'_axisubs_plans_' %}
+                        <tr id="plan-1" class="iedit author-self type-plan-list status-publish format-standard hentry">
+                          <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title">
+                            <div class="image">
+                                {% if(item['meta'][item['ID']~'_axisubs_plans_image'] != '') %}
+                                    {% set classUploadImg = 'show' %}
+                                    {% set imagePath = item['meta'][item['ID']~'_axisubs_plans_image'] %}
+                                {% else %}
+                                    {% set classUploadImg = 'hide' %}
+                                    {% set imagePath = data['plugin_url']~'/resources/assets/images/ico_noimage.png' %}
+                                {% endif %}
+                              <img class="upload_image_preview" src="{{ imagePath }}" />
+                            </div>
+                            <div class="plan-title">
+                              <strong><a href="?page=plans-index&task=edit&id={{ item['ID'] }}" class="row-title">{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</a></strong>
+                              <span>{{ esc_html_e('ID', 'axis-subscriptions') }} : {{ item['ID'] }}</span>
+                            </div>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">{{ esc_html_e('Show more details', 'axis-subscriptions') }}</span></button>
+                          </td>
+                          <td class="period column-period" data-colname="Period">
+                              {% set planType = planMeta[planPrefix~'type'] %}
+                              <span>{{ data['plan_types'][planType] }}</span>
+                              {% if (planMeta[planPrefix~'slug_stripe'] != '') %}
+                                  <br/>
+                              <span class="bind-with_payment">{{ esc_html_e('Stripe', 'axis-subscriptions') }}</span>
+                              {% endif %}
+                          </td>
+                          <td class="period column-price" data-colname="Price">
+                              {% if(planType != 'free') %}
+
+                                  {% set price = currencyData['code']~planMeta[planPrefix~'price'] %}
+                                  <span class="plan_price">{{ price }}</span>
+                              {% endif %}
+
+                              {% if(planType == 'free') %}
+                                  {% if(planMeta[planPrefix~'period_forever'] == '1') %}
+                                      {{ esc_html_e('Forever', 'axis-subscriptions') }}
+                                  {% else %}
+                                      {% set period_units = planMeta[planPrefix~'period_units'] %}
+                                      {{ planMeta[planPrefix~'period'] }}
+                                      {{ data['unitInWords'][period_units] }}
+                                  {% endif %}
+                              {% elseif(planType == 'renewal') %} {# Non-recurring #}
+                                  {{ esc_html_e('for', 'axis-subscriptions') }} {{ planMeta[planPrefix~'period'] }}
+                                  {% set period_units = planMeta[planPrefix~'period_units'] %}
+                                  {{ data['unitInWords'][period_units] }}
+                              {% elseif(planType == 'renewal_with_trial') %} {# Non-recurring with trial #}
+                                  {{ esc_html_e('for', 'axis-subscriptions') }} {{ planMeta[planPrefix~'period'] }}
+                                  {% set period_units = planMeta[planPrefix~'period_units'] %}
+                                  {{ data['unitInWords'][period_units] }}
+                                  {% if(planMeta[planPrefix~'trial_period'] != '') %}
+                                      {{ esc_html_e('with trial duration of', 'axis-subscriptions') }}
+                                      {{ planMeta[planPrefix~'trial_period'] }}
+                                      {% set trial_period_units = planMeta[planPrefix~'trial_period_units'] %}
+                                      {{ data['unitInWords'][trial_period_units] }}
+                                  {% endif %}
+                              {% elseif(planType == 'recurring') %}
+                                  {{ esc_html_e('for each', 'axis-subscriptions') }} {{ planMeta[planPrefix~'period'] }}
+                                  {% set period_units = planMeta[planPrefix~'period_units'] %}
+                                  {{ data['unitInWords'][period_units] }}
+                                  {% if(planMeta[planPrefix~'billing_cycles'] > 0) %}
+                                      , {{ esc_html_e('for', 'axis-subscriptions') }} {{ planMeta[planPrefix~'billing_cycles'] }} {{ esc_html_e('installments', 'axis-subscriptions') }}
+                                  {% else %}
+                                  {% endif %}
+                              {% elseif(planType == 'recurring_with_trial') %}
+                                  {{ esc_html_e('for each', 'axis-subscriptions') }} {{ planMeta[planPrefix~'period'] }}
+                                  {% set period_units = planMeta[planPrefix~'period_units'] %}
+                                  {{ data['unitInWords'][period_units] }}
+                                  {% if(planMeta[planPrefix~'billing_cycles'] > 0) %}
+                                      , {{ esc_html_e('for', 'axis-subscriptions') }} {{ planMeta[planPrefix~'billing_cycles'] }} {{ esc_html_e('installments', 'axis-subscriptions') }}
+                                  {% else %}
+                                  {% endif %}
+                                  {% if(planMeta[planPrefix~'trial_period'] != '') %}
+                                      {{ esc_html_e('with trial duration of', 'axis-subscriptions') }}
+                                      {{ planMeta[planPrefix~'trial_period'] }}
+                                      {% set trial_period_units = planMeta[planPrefix~'trial_period_units'] %}
+                                      {{ data['unitInWords'][trial_period_units] }}
+                                  {% endif %}
+                              {% else %}
+                                  {% if(planMeta[planPrefix~'period'] != '') %}
+                                      <span>{{ planMeta[planPrefix~'period'] }}</span>
+                                      {% set period_units = planMeta[planPrefix~'period_units'] %}
+                                      {{ data['unitInWords'][period_units] }}
+                                  {% endif %}
+                              {% endif %}
+                              {% if(planMeta[planPrefix~'setup_cost'] > 0) %}
+                                  {% set setUpPrice = currencyData['code']~planMeta[planPrefix~'setup_cost'] %}
+                                  {{ esc_html_e('and a', 'axis-subscriptions') }} <span class="plan_price">{{ setUpPrice }}</span> {{ esc_html_e('as setup cost', 'axis-subscriptions') }}
+                              {% endif %}
+                          </td>
+                          <td class="status column-status" data-colname="Status">
+                              <label class="switch">
+                                <input {% if(item['meta'][item['ID']~'_axisubs_plans_status'] == 1) %} checked="checked" {% endif %} type="checkbox">
+                                <div class="slider round change_plan_status" data-id="{{ item['ID'] }}"></div>
+                              </label>
+                          </td>
+                          <td class="period column-img" data-colname="Action">
+                            <a class="button button-primary" href="?page=plans-index&task=edit&id={{ item['ID'] }}">{{ esc_html_e('Edit', 'axis-subscriptions') }}</a>
+                            <a class="button" href="?page=plans-index&task=delete&id={{ item['ID'] }}">{{ esc_html_e('Delete', 'axis-subscriptions') }}</a>
+                          </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">
+                                <div class="row">
+                                    No plans added.
+                                </div>
+                            <td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <input type="hidden" id="site_url" value="{{ data['site_url'] }}"/>
+            {% if(data['total_items']>5) %}
+                {{ paginationD['limitbox'] | raw }}
+                {{ paginationD['links'] | raw }}
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

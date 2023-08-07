@@ -1,0 +1,10 @@
+{
+    "id": "botble/testimonial",
+    "name": "Testimonial Form",
+    "namespace": "Botble\\Testimonial\\",
+    "provider": "Botble\\Testimonial\\Providers\\TestimonialServiceProvider",
+    "author": "Santhila Databot Private Limited",
+    "url": "https://santhila.co",
+    "version": "2.0.0",
+    "description": "Testimonial Form"
+}

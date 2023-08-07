@@ -1,0 +1,87 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs wrap axisubs-bs3">
+    <h3 class="wp-heading-inline">{{ pagetitle }}
+    </h3>
+    <div class="axisubs_title_description">
+        {{ esc_html_e('Need help with the setting up of your membership site ?', 'axis-subscriptions') }}
+    </div>
+    <form method="post" action="">
+        <div class="axisubs-support">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <h3 class="wp-heading-inline">{{ esc_html_e('Documentation', 'axis-subscriptions') }}
+                </h3>
+                <div class="axisubs_support_desc">
+                  {{ esc_html_e('It is a great place to start. We have explained almost all the concepts with a few examples. Start reading', 'axis-subscriptions') }}
+                  <div>
+                    Need help setting up your Membership site.<br />
+                    <a class="button button-secondary" href="https://www.flycart.org/docs/wordpress/axis-subscriptions" target="_blank">Documentation</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <h3 class="wp-heading-inline">{{ esc_html_e('Video Tutorials', 'axis-subscriptions') }}
+                </h3>
+                <div class="axisubs_support_desc">
+                  {{ esc_html_e('We have made a few video tutorials for you to get started with selling membership plans in your website. Watch them', 'axis-subscriptions') }}
+                  <div>
+                    Need help setting up your Membership site.<br />
+                    <a class="button button-secondary" href="https://www.flycart.org/products/wordpress/axis-subscriptions#feature-button-2" target="_blank">Video tutorials</a>
+                  </div>
+              </div>
+              </div>
+              <div class="col-md-12 wrap">
+                <h4 class="wp-heading-inline">{{ esc_html_e('Need our professional help ?', 'axis-subscriptions') }}
+                </h4>
+                <div class="axisubs_support_desc">
+                    {{ esc_html_e('We got you covered. Contact us to set up your membership website', 'axis-subscriptions') }}<br />
+                    {{ esc_html_e('Go PRO and get awesome features:', 'axis-subscriptions') }}
+                    <ul>
+                      <li>
+                        <span class="dashicons dashicons-star-filled"></span>
+                        <div class="feature-content">
+                          <div class="feature-title">{{ esc_html_e('Stripe Payments', 'axis-subscriptions') }}</div>
+                          <p>
+                            {{ esc_html_e('Collect payments through a robust payments system with low transaction fee using Stripe. Complete Integration of Stripe recurring payments. Refer demo video.', 'axis-subscriptions') }}
+                          </p>
+                        </div>
+                      </li>
+                      <li>
+                        <span class="dashicons dashicons-star-filled"></span>
+                        <div class="feature-content">
+                          <div class="feature-title">{{ esc_html_e('Content Restrction', 'axis-subscriptions') }}</div>
+                          <p>
+                            {{ esc_html_e('Restrict access to your pages, posts, categories. Restrict the content to only paid users based on level of subscrition purchased.', 'axis-subscriptions') }}
+                          </p>
+                        </div>
+                      </li>
+                      <li>
+                        <span class="dashicons dashicons-star-filled"></span>
+                        <div class="feature-content">
+                          <div class="feature-title">{{ esc_html_e('All Apps added in future', 'axis-subscriptions') }}</div>
+                          <p>
+                            {{ esc_html_e('Gain access to all the apps to be added in future.', 'axis-subscriptions') }}
+                          </p>
+                        </div>
+                      </li>
+                      <li>
+                        <span class="dashicons dashicons-star-filled"></span>
+                        <div class="feature-content">
+                          <div class="feature-title">{{ esc_html_e('Access to priority support', 'axis-subscriptions') }}</div>
+                          <p>
+                            {{ esc_html_e('Struggling with something in your subscription selling ? Open a private ticket and our super support team just takes care within hours your problem is solved.', 'axis-subscriptions') }}
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                    {{ esc_html_e('I need the PRO version', 'axis-subscriptions') }}
+                    <a class="button button-primary" href="https://www.flycart.org/products/wordpress/axis-subscriptions">Take me there</a>
+                </div>
+              </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

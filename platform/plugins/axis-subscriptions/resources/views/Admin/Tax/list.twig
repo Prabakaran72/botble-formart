@@ -1,0 +1,59 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs wrap">
+    <h1 class="wp-heading-inline">{{ pagetitle }}</h1>
+    <a class="page-title-action" href="?page=tax-index&task=edit">{{ esc_html_e('Add New Tax', 'axis-subscriptions') }}</a>
+    <div class="axisubs_title_description">
+        {{ esc_html_e('Configure your tax rules. It is simple. if you need any help, please contact us', 'axis-subscriptions') }}
+    </div>
+    <form method="post" id="axisubs_list_form" action="?page=tax-index">
+      <div class="axis-tax">
+      <div class="axisubs-list">
+        <table class="wp-list-table widefat fixed striped" width="100%">
+            <thead>
+                <tr>
+                    <th scope="col" id="name" class="manage-column column-primary"><span>{{ esc_html_e('Tax Name', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="code" class="manage-column column-primary"><span>{{ esc_html_e('Country', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="status" class="manage-column column-primary"><span>{{ esc_html_e('Province', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="value-type" class="manage-column column-primary"><span>{{ esc_html_e('Tax Tax (%)', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="action" class="manage-column column-primary"><span>{{ esc_html_e('Action', 'axis-subscriptions') }}</span></th>
+                </tr>
+            </thead>
+            <tbody id="the-list">
+            {% for key, item in items %}
+                <tr id="row{{ key%2 }}" class="iedit author-self status-publish format-standard hentry">
+                    <td class="title column-title has-row-actions column-primary" data-colname="Title">
+                      <div class="tax-name">
+                        <strong><a href="?page=tax-index&task=edit&id={{ item['axisubs_taxrate_id'] }}" class="row-title">{{ item['tax_rate_name'] }}</a></strong>
+                        <span>{{ esc_html_e('ID', 'axis-subscriptions') }} : {{ item['axisubs_taxrate_id'] }}</span>
+                      </div>
+                      </div>
+                      <button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+                    </td>
+                    <td class="status column-country" data-colname="Country">
+                        {{ data['countries'][item['tax_rate_country']] }}
+                    </td>
+                    <td class="status column-value" data-colname="Province">{{ item['province_name'] }}</td>
+                    <td class="status column-valid-from" data-colname="Tax Rate">{{ item['tax_rate'] }}</td>
+                    <td class="status column-tax-rate" data-colname="Tax Rate">
+                      <a class="button button-primary" href="?page=tax-index&task=edit&id={{ item['axisubs_taxrate_id'] }}">Edit</a>
+                      <a class="button" href="?page=tax-index&task=delete&id={{ item['axisubs_taxrate_id'] }}">Delete</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">No Tax available</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+        {% if items|length > 5 %}
+            {{ paginationD['limitbox'] | raw }}
+            {{ paginationD['links'] | raw }}
+        {% endif %}
+     </form>
+</div>
+{% endblock %}

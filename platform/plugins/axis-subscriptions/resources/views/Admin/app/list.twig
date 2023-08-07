@@ -1,0 +1,56 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs axisubs-bs3 wrap">
+      <h3 class="wp-heading-inline">{{ pagetitle }}</h3>
+      <div class="axisubs_title_description">
+            {{ esc_html_e('Apps available for the Axis Membership. View the apps to configure them', 'axis-subscriptions') }}
+        </div>
+      <form method="post" action="">
+        <div class="axisubs-apps">
+          {% for app in apps %}
+            <div class="axisubs-app-container col-lg-3 col-md-4 col-sm-12 col-xs-12">
+              <div class="axisubs-app-container-i">
+                <div class="axisubs-app-image">
+                    <img src="{{ app['pluginImage'] }}"/>
+                </div>
+                <div class="axisubs-app-name">
+                    {{ app['Title'] }}
+                </div>
+                <div class="axisubs-app-description">
+                    {{ app['Description'] }}
+                    <div class="axisubs-app-url">
+                      <a href="{{ app['PluginURI'] }}"> {{ app['PluginURI'] }}</a>
+                    </div>
+                </div>
+
+                <div class="app-footer">
+                <div class="axisubs-app-author">
+                    {{ app['AuthorName'] }}
+                </div>
+                <div class="axisubs-app-version">
+                    Version: {{ app['Version'] }}
+                </div>
+                </div>
+                <div class="axisubs-app-buttons">
+                  {% if app['active'] == true %}
+                      {% set urlEnableDisable = '?page=app-index&task=disable&p='~app['pluginPath'] %}
+                      {% set enableDisableC = 'Disable' %}
+                      <a class="button app-button-view" href="?page=app-index&task=view&p={{ app['pluginFolder'] }}">View</a>
+                  {% else %}
+                      {% set urlEnableDisable = '?page=app-index&task=enable&p='~app['pluginPath'] %}
+                      {% set enableDisableC = 'Enable' %}
+                  {% endif %}
+                  <a class="button" href="{{ urlEnableDisable }}">{{ enableDisableC }}</a>
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <div class="row">
+                No App found.
+            </div>
+          {% endfor %}
+        </div>
+    </form>
+</div>
+{% endblock %}

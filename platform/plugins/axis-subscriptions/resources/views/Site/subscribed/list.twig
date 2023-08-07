@@ -1,0 +1,71 @@
+{% set statusText = data['statusText'] %}
+<div class="axisubs wrap">
+    <div class="axisubs-subscribed-title">
+        <h3>{{ pagetitle }}</h3>
+    </div>
+    {{ message | raw }}
+    <form method="post" action="{{ subscribtions_url }}" id="axisubs_list_form">
+
+      <table class="table subscription-list" border="1" border-color="#ddd">
+        <tbody>
+        <tr>
+          <th>
+              Subscription Id
+          </th>
+          <th>
+              plan name
+          </th>
+          <th>
+              start date
+          </th>
+          <th>
+              End date
+          </th>
+          <th>
+              status
+          </th>
+          <th>
+              Action
+          </th>
+        </tr>
+        {% for subscribe in subscribers %}
+            {% set plan = subscribe['plan'] %}
+            {% set planMeta = subscribe['plan']['meta'] %}
+            {% set meta = subscribe['meta'] %}
+        <tr>
+          <td>
+            {{ subscribe['ID'] }}
+          </td>
+          <td>
+            {{ planMeta[plan['ID']~'_axisubs_plans_name'] }} - {{ currencyData['code']~meta[subscribe['ID']~'_axisubs_subscribe_total_price'] }}
+          </td>
+          <td>
+            {{ meta[subscribe['ID']~'_axisubs_subscribe_start_on'] }}
+          </td>
+          <td>
+            {{ meta[subscribe['ID']~'_axisubs_subscribe_end_on'] }}
+          </td>
+          <td>
+            {{ statusText[meta[subscribe['ID']~'_axisubs_subscribe_status']] | raw }}
+          </td>
+          <td>
+            <a class="axisubs-btn" href="{{ subscribe['subscription_url'] }}">View Details</a>
+              {{ subscribe['additional_buttons'] | raw }}
+          </td>
+        </tr>
+        {% else %}
+            <div class="row">
+                No subscription found.
+            </div>
+        {% endfor %}
+        {% if subscribers|length > 0 %}
+            <div class="axisubs-pagination-cont">
+                {{ paginationD['limitbox'] | raw }}
+                {{ paginationD['links'] | raw }}
+            </div>
+        {% endif %}
+        </tbody>
+      </table>
+
+    </form>
+</div>

@@ -1,0 +1,23 @@
+{
+    "id": "botble/dependent-field",
+    "name": "Dependent Field",
+    "description": "A custom plugin to handle dependent fields in the Botble eCommerce plugin.",
+    "version": "1.0.0",
+    "author": "Prabakran",
+    "email": "prabakaranpbk@gmail.com",
+    "homepage": "https://santhila.com",
+    "namespace": "Botble\\DependentField\\",
+    "providers": [
+      "Botble\\DependentField\\Providers\\DependentFieldServiceProvider"
+    ],
+    "autoload": {
+      "psr-4": {
+        "DependentField\\": "plugins/dependent-field/src"
+      }
+    },
+    "dependencies": {
+      "botble/core": "^5.0"
+      
+    }
+  }
+  

@@ -1,0 +1,285 @@
+{% set subMeta = subscriber['meta'] %}
+{% set subPrefix = subscriber['ID']~'_'~subscriber['post_type']~'_' %}
+<div class="axisubs wrap">
+    <div class="axisubs-subs_details-title">
+        <h1 class="wp-heading-inline">{{ pagetitle }}</h1>
+        <a class="page-title-action" href="?page=subscriptions-index&task=edit&user_id={{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_user_id'] }}&sid={{ subscriber['ID'] }}">Edit</a>
+        <a class="page-title-action" href="?page=subscriptions-index&task=delete&id={{ subscriber['ID'] }}">Delete</a>
+        <a class="page-title-action" href="?page=subscriptions-index">Back</a>
+    </div>
+    <div class="axisubs-subscription_details">
+        <div class="axisubs-subscription-summary">
+            <div class="axisubs-fields">
+                <div class="subscription-label">
+                    <strong>Subscription Id :</strong>
+                </div>
+                <div class="subscription-content">
+                    {{ subscriber['ID'] }}
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="subscription-label">
+                    <strong>Plan Name :</strong>
+                </div>
+                <div class="subscription-content">
+                    <a class="" href="?page=plans-index&task=edit&id={{ planDetails['meta'][planDetails['ID']~'_axisubs_plans_slug'] }}&id={{ planDetails['ID'] }}">{{ planDetails['meta'][planDetails['ID']~'_axisubs_plans_name']}}</a>
+
+                    <span>(
+                        {% set planMeta = planDetails['meta'] %}
+                        {% set plan = planDetails %}
+                        {% set planPrefix = plan['ID']~'_'~plan['post_type']~'_' %}
+                        {% set planType = planMeta[planPrefix~'type'] %}
+                        {% if(planType != 'free') %}
+                            {% set price = currencyData['code']~planMeta[planPrefix~'price'] %}
+                            {{ price }}
+                        {% endif %}
+
+                        {% if(planType == 'free') %}
+                            {% if(planMeta[planPrefix~'period_forever'] == '1') %}
+                                {{ esc_html_e('Forever', 'axis-subscriptions') }}
+                            {% else %}
+                                {% set period_units = planMeta[planPrefix~'period_units'] %}
+                                {{ planMeta[planPrefix~'period'] }}
+                                {{ data['unitInWords'][period_units] }}
+                            {% endif %}
+                        {% elseif(planType == 'renewal') %} {# Non-recurring #}
+                            {{ esc_html_e('for', 'axis-subscriptions') }} {{ planMeta[planPrefix~'period'] }}
+                            {% set period_units = planMeta[planPrefix~'period_units'] %}
+                            {{ data['unitInWords'][period_units] }}
+                        {% elseif(planType == 'renewal_with_trial') %} {# Non-recurring with trial #}
+                            {{ esc_html_e('for', 'axis-subscriptions') }} {{ planMeta[planPrefix~'period'] }}
+                            {% set period_units = planMeta[planPrefix~'period_units'] %}
+                            {{ data['unitInWords'][period_units] }}
+                            {% if(planMeta[planPrefix~'trial_period'] != '') %}
+                                {{ esc_html_e('with trial duration of', 'axis-subscriptions') }}
+                                {{ planMeta[planPrefix~'trial_period'] }}
+                                {% set trial_period_units = planMeta[planPrefix~'trial_period_units'] %}
+                                {{ data['unitInWords'][trial_period_units] }}
+                            {% endif %}
+                        {% elseif(planType == 'recurring') %}
+                            {{ esc_html_e('for each', 'axis-subscriptions') }} {{ planMeta[planPrefix~'period'] }}
+                            {% set period_units = planMeta[planPrefix~'period_units'] %}
+                            {{ data['unitInWords'][period_units] }}
+                            {% if(planMeta[planPrefix~'billing_cycles'] > 0) %}
+                                , {{ esc_html_e('for', 'axis-subscriptions') }} {{ planMeta[planPrefix~'billing_cycles'] }} {{ esc_html_e('installments', 'axis-subscriptions') }}
+                            {% else %}
+                            {% endif %}
+                        {% elseif(planType == 'recurring_with_trial') %}
+                            {{ esc_html_e('for each', 'axis-subscriptions') }} {{ planMeta[planPrefix~'period'] }}
+                            {% set period_units = planMeta[planPrefix~'period_units'] %}
+                            {{ data['unitInWords'][period_units] }}
+                            {% if(planMeta[planPrefix~'billing_cycles'] > 0) %}
+                                , {{ esc_html_e('for', 'axis-subscriptions') }} {{ planMeta[planPrefix~'billing_cycles'] }} {{ esc_html_e('installments', 'axis-subscriptions') }}
+                            {% else %}
+                            {% endif %}
+                            {% if(planMeta[planPrefix~'trial_period'] != '') %}
+                                {{ esc_html_e('with trial duration of', 'axis-subscriptions') }}
+                                {{ planMeta[planPrefix~'trial_period'] }}
+                                {% set trial_period_units = planMeta[planPrefix~'trial_period_units'] %}
+                                {{ data['unitInWords'][trial_period_units] }}
+                            {% endif %}
+                        {% else %}
+                            {% if(planMeta[planPrefix~'period'] != '') %}
+                                <span>{{ planMeta[planPrefix~'period'] }}</span>
+                                {% set period_units = planMeta[planPrefix~'period_units'] %}
+                                {{ data['unitInWords'][period_units] }}
+                            {% endif %}
+                        {% endif %}
+                        {% if(planMeta[planPrefix~'setup_cost'] > 0) %}
+                            {% set setUpPrice = currencyData['code']~planMeta[planPrefix~'setup_cost'] %}
+                            {{ esc_html_e('and a', 'axis-subscriptions') }} {{ setUpPrice }} {{ esc_html_e('as setup cost', 'axis-subscriptions') }}
+                        {% endif %}
+                    )</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="subscription-label">
+                    <strong> Subscription Status :</strong>
+                </div>
+                <div class="subscription-content">
+                    {{ statusText | raw }}
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="subscription-label">
+                    <strong>Trial start date :</strong>
+                </div>
+                <div class="subscription-content">
+                    {% if subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_trial_start_on'] %}
+                        {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_trial_start_on'] }}
+                    {% else %}
+                        <span>-</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="subscription-label">
+                    <strong>Trial end date :</strong>
+                </div>
+                <div class="subscription-content">
+                    {% if subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_trial_end_on'] %}
+                        {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_trial_end_on'] }}
+                    {% else %}
+                        <span>-</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="subscription-label">
+                    <strong>Subscription start date :</strong>
+                </div>
+                <div class="subscription-content">
+                    {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_start_on'] }}
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="subscription-label">
+                    <strong>Subscription end date :</strong>
+                </div>
+                <div class="subscription-content">
+                    {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_end_on'] }}
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="subscription-label">
+                    <strong>Price :</strong>
+                </div>
+                <div class="subscription-content">
+                    {{ currencyData['code']~subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_price'] }}
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="subscription-label">
+                    <strong>Setup cost :</strong>
+                </div>
+                <div class="subscription-content">
+                    {{ currencyData['code']~subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_setup_cost'] }}
+                </div>
+            </div>
+            {{ data['aditionalPrices'] | raw}}
+            <div class="axisubs-fields">
+                <div class="subscription-label">
+                    <strong>Total Price :</strong>
+                </div>
+                <div class="subscription-content">
+                    {{ currencyData['code']~subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_total_price'] }}
+                </div>
+            </div>
+            {% if(planType != 'free') %}
+                <div class="axisubs-fields">
+                    <div class="subscription-label">
+                        <h3>{{ esc_html_e('Transaction Details', 'axis-subscriptions') }}</h3>
+                    </div>
+                </div>
+                <div class="axisubs-fields">
+                    <div class="subscription-label">
+                        <strong>{{ esc_html_e('Payment method', 'axis-subscriptions') }}</strong>
+                    </div>
+                    <div class="subscription-content">
+                        {{ esc_html_e(subMeta[subPrefix~'payment_type'], 'axis-subscriptions') }}
+                    </div>
+                </div>
+                <div class="axisubs-fields">
+                    <div class="subscription-label">
+                        <strong>{{ esc_html_e('Payment status', 'axis-subscriptions') }}</strong>
+                    </div>
+                    <div class="subscription-content">
+                        {{ subMeta[subPrefix~'payment_status'] }}
+                    </div>
+                </div>
+                {% if subMeta[subPrefix~'subscription_profile_id'] != '' %}
+                    <div class="axisubs-fields">
+                        <div class="subscription-label">
+                            <strong>{{ esc_html_e('Subscription profile', 'axis-subscriptions') }}</strong>
+                        </div>
+                        <div class="subscription-content">
+                            {{ subMeta[subPrefix~'subscription_profile_id'] }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if subMeta[subPrefix~'transaction_ref_id'] != '' %}
+                <div class="axisubs-fields">
+                    <div class="subscription-label">
+                        <strong>{{ esc_html_e('Transaction id', 'axis-subscriptions') }}</strong>
+                    </div>
+                    <div class="subscription-content">
+                        {{ subMeta[subPrefix~'transaction_ref_id'] }}
+                    </div>
+                </div>
+                {% endif %}
+                <div class="axisubs-fields metabox-holder">
+                    <div class="meta-box-sortables ui-sortable" id="paymentresponse">
+                        <div class="postbox closed">
+                            <button class="handlediv button-link" type="button" aria-expanded="false">
+                                <span class="screen-reader-text">Toggle panel: {{ esc_html_e('Payment response', 'axis-subscriptions') }}</span>
+                                <span class="toggle-indicator" aria-hidden="true"></span>
+                            </button>
+                            <h2 class="hndle ui-sortable-handle toggle_axisubs">
+                                <span>{{ esc_html_e('Payment response', 'axis-subscriptions') }}</span>
+                            </h2>
+                            <div class="inside">
+                                <div class="subscription-response_text">
+                                    {{ subMeta[subPrefix~'postpayment'] }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="axisubs-subs-billinfo-con">
+            <div class="subscription_details_title">
+                <h1>Billing Information</h1>
+            </div>
+            <div class="billing-info">
+                <div class="axisubs-fields">
+                    <div class="billing-label">
+                        <strong>Customer name :</strong>
+                    </div>
+                    <div class="billing-content">
+                        {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_first_name'] }}
+                        {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_last_name'] }}
+                    </div>
+                </div>
+                <div class="axisubs-fields">
+                    <div class="billing-label">
+                        <strong>Email :</strong>
+                    </div>
+                    <div class="billing-content">
+                        {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_email'] }}
+                    </div>
+                </div>
+                <div class="axisubs-fields">
+                    <div class="billing-label">
+                        <strong>Address :</strong>
+                    </div>
+                    <div class="billing-content">
+                        {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_address_line1'] }},
+                        {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_address_line2'] }},
+                        {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_city'] }},
+                        {{ data['province'] }},
+                        {{ data['country'] }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="axisubs-subs-billinfo-con">
+            <div class="subscription_details_title">
+                <h1>{{ esc_html_e('Subscription history', 'axis-subscriptions') }}</h1>
+            </div>
+            {% for subs_history in data['subs_history'] %}
+                <div class="axisubs_history_content">
+                    {{ subs_history['comment_content'] | raw }}
+                </div>
+                <div class="axisubs_history_date">
+                    {{ esc_html_e('On', 'axis-subscriptions') }} {{ subs_history['comment_date'] }}
+                </div>
+            {% else %}
+                <div class="axisubs-fields">
+                    {{ esc_html_e('No history available', 'axis-subscriptions') }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>

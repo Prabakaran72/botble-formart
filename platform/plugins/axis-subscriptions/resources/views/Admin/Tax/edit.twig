@@ -1,0 +1,66 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs wrap">
+    <h3 class="wp-heading-inline">{{ pagetitle }}</h3>
+    <form method="post" id="tax_form" action="?page=tax-index">
+        <div class="axisubs-fields-con">
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_tax_tax_rate_name">{{ esc_html_e('Tax Name', 'axis-subscriptions') }}</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[tax][tax_rate_name]" id="axisub_tax_tax_rate_name" value="{{ item['tax_rate_name'] }}"/>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisubs_tax_tax_rate_country">{{ esc_html_e('Country', 'axis-subscriptions') }}</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    {{ data['country'] | raw }}
+                    <span class="help-text"></span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisubs_tax_tax_rate_state">{{ esc_html_e('Province', 'axis-subscriptions') }}</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    {{ data['province'] | raw }}
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_tax_tax_rate">{{ esc_html_e('Tax Rate (%)', 'axis-subscriptions') }}</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[tax][tax_rate]" id="axisub_tax_tax_rate" value="{{ item['tax_rate'] }}"/>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <input type="hidden" name="id" value="{{ item['axisubs_taxrate_id'] }}" id="tax_id"/>
+                    <input type="hidden" name="task" value="save"/>
+                    <input type="hidden" name="site_url" value="{{ site_url }}" id="site_url"/>
+                </div>
+                <div class="axisubs-fields-content">
+                    <button type="button" onclick="validateTaxForm()" class="button button-primary">{{ esc_html_e('Save', 'axis-subscriptions') }}</button>
+                    <a href="?page=tax-index" class="button">{{ esc_html_e('Cancel', 'axis-subscriptions') }}</a>
+                </div>
+            </div>
+        </div>
+     </form>
+</div>
+<script type="application/javascript">
+    // For validating Form
+    function validateTaxForm(){
+        (function($){
+            var valid = validateRequiredFields('#tax_form');
+            if(valid){
+                $('#tax_form').submit();
+            }
+        })(jQuery);
+    }
+</script>
+{% endblock %}

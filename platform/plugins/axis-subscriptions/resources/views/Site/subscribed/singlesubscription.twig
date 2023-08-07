@@ -1,0 +1,175 @@
+{% set subMeta = subscriber['meta'] %}
+{% set subPrefix = subscriber['ID']~'_'~subscriber['post_type']~'_' %}
+<div class="axisubs wrap subscription_details">
+    <div class="axisubs-plan_details-header">
+        <div class="axisubs-plan_details-title">
+            <h3>{{ pagetitle }}</h3>
+        </div>
+        {{ message | raw }}
+        <div class="axisubs-plan_details-summary">
+            <table class="table" border="1" border-color="#ddd">
+                <tbody>
+                <tr>
+                    <td>
+                        Subscription Id
+                    </td>
+                    <td>
+                        {{ subscriber['ID'] }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Plan Name
+                    </td>
+                    <td>
+                        {{ planDetails['meta'][planDetails['ID']~'_axisubs_plans_name']}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Plan Price
+                    </td>
+                    <td>
+                        {{ currencyData['code'] }}{{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_price'] }}
+                    </td>
+                </tr>
+                {% if(subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_setup_cost']>0) %}
+                    <tr>
+                        <td>
+                            Setup cost
+                        </td>
+                        <td>
+                            {% if(subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_setup_cost']>0) %}
+                                {{ currencyData['code'] }}{{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_setup_cost'] }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+                {{ data['aditionalPrices'] | raw }}
+                <tr>
+                    <td>
+                        Total Price
+                    </td>
+                    <td>
+                        {{ currencyData['code'] }}{{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_total_price'] }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Subscription Status
+                    </td>
+                    <td>
+                        {{ statusText | raw }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Subscription start date
+                    </td>
+                    <td>
+                        {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_start_on'] }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Subscription end date
+                    </td>
+                    <td>
+                        {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_end_on'] }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <h3>{{ esc_html_e('Transaction Details', 'axis-subscriptions') }}</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ esc_html_e('Payment method', 'axis-subscriptions') }}
+                    </td>
+                    <td>
+                        {{ esc_html_e(subMeta[subPrefix~'payment_type'], 'axis-subscriptions') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ esc_html_e('Payment status', 'axis-subscriptions') }}
+                    </td>
+                    <td>
+                        {{ subMeta[subPrefix~'payment_status'] }}
+                    </td>
+                </tr>
+                {% if subMeta[subPrefix~'subscription_profile_id'] != '' %}
+                    <tr>
+                        <td>
+                            {{ esc_html_e('Subscription profile', 'axis-subscriptions') }}
+                        </td>
+                        <td>
+                            {{ subMeta[subPrefix~'subscription_profile_id'] }}
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if subMeta[subPrefix~'transaction_ref_id'] != '' %}
+                    <tr>
+                        <td>
+                            {{ esc_html_e('Transaction id', 'axis-subscriptions') }}
+                        </td>
+                        <td>
+                            {{ subMeta[subPrefix~'transaction_ref_id'] }}
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="axisubs-plan-billinfo-con">
+        <div class="axisubs-plan_details-title">
+            <h3>Billing Info</h3>
+        </div>
+        <div class="axisubs-plan_details-summary">
+            <div class="axisubs-plan-billinfo-fields">
+                <div class="axisubs-billinfo-f-i">
+                 <span class="axisubs-billinfo-f-label">
+                    Customer name :
+                 </span>
+                 <span class="axisubs-billinfo-f-field">
+                    {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_first_name'] }}
+                     {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_last_name'] }}
+                 </span>
+                </div>
+            </div>
+            <div class="axisubs-plan-billinfo-fields">
+                <div class="axisubs-billinfo-f-i">
+               <span class="axisubs-billinfo-f-label">
+                  Email :
+               </span>
+               <span class="axisubs-billinfo-f-field">
+                  {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_email'] }}
+               </span>
+                </div>
+            </div>
+            <div class="axisubs-plan-billinfo-fields">
+                <div class="axisubs-billinfo-f-i">
+               <span class="axisubs-billinfo-f-label">
+                  Address :
+               </span>
+               <span class="axisubs-billinfo-f-field">
+                  {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_address_line1'] }},
+                   {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_address_line2'] }},
+                   {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_city'] }},
+                   {{ data['province'] }},
+                   {{ data['country'] }}
+               </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <a class="axisubs-btn btn" href="{{ subscribtions_url }}">Back to Subscriptions</a>
+        {% if(data['cancel_url'] != '') %}
+            <a class="axisubs-btn btn" href="{{ data['cancel_url'] }}">{{ esc_html__('Cancel Subscription') }}</a>
+        {% endif %}
+        {{ subscriber['additional_buttons'] | raw }}
+    </div>
+</div>

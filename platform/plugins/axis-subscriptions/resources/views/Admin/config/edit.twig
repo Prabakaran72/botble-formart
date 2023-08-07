@@ -1,0 +1,289 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs axisubs-bs3 wrap">
+  <h3 class="wp-heading-inline">{{ pagetitle }}</h3>
+  <div class="axisubs_title_description">
+      {{ esc_html_e('Global settings for the membership system. Please make sure you configure these settings correct.', 'axis-subscriptions') }}
+  </div>
+    {% set item = all %}
+    {% set metaPrefix = item['ID']~'_'~item['post_type']~'_' %}
+  <form method="post" id="config" action="?page=config-index" onsubmit="return validateConfig()">
+      <div class="tab-container">
+          <div class="nav-tabs-container">
+              <ul class="nav nav-tabs">
+                  <li role="basic" class="active tab_axisubs"><a data-toggle="tab" href="#basic">Basic</a></li>
+                  <li role="tax" class="tab_axisubs"><a data-toggle="tab" href="#tax">Tax</a></li>
+                  <li role="eu_vat" class="tab_axisubs"><a data-toggle="tab" href="#eu_vat">EU Vat</a></li>
+                  <li role="dashboard" class="tab_axisubs"><a data-toggle="tab" href="#dashboard">Dashboard</a></li>
+                  <li role="frontend" class="tab_axisubs"><a data-toggle="tab" href="#frontend">{{ esc_html_e('Frontend', 'axis-subscriptions') }}</a></li>
+              </ul>
+          </div>
+         <div class="axisubs-fields-con tab-content">
+             <div id="basic" class="tab-pane fade in active">
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisuba_config_address1">Address Line 1</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         <input type="text" name="axisubs[config][address1]" id="axisuba_config_address1" class="required" value="{{ all['meta'][all['ID']~'_axisubs_config_address1'] }}"/>
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisuba_config_address2">Address Line 2</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         <input type="text" name="axisubs[config][address2]" id="axisuba_config_address2" value="{{ all['meta'][all['ID']~'_axisubs_config_address2'] }}"/>
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisuba_config_city">City</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         <input type="text" name="axisubs[config][city]" id="axisuba_config_city" class="required" value="{{ all['meta'][all['ID']~'_axisubs_config_city'] }}"/>
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisuba_config_zip">Zip / Postal code</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         <input type="text" name="axisubs[config][zip]" id="axisuba_config_zip" class="required" value="{{ all['meta'][all['ID']~'_axisubs_config_zip'] }}"/>
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisuba_config_country">Country</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         {#<input type="text" name="axisubs[config][country]" id="axisuba_config_country" value="{{ all['meta'][all['ID']~'_axisubs_config_country'] }}"/>#}
+                         {{ data['country'] | raw }}
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisuba_config_region">Zone / Region</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         {#<input type="text" name="axisubs[config][region]" id="axisuba_config_region" value="{{ all['meta'][all['ID']~'_axisubs_config_region'] }}"/>#}
+                         {{ data['province'] | raw }}
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisuba_config_currency">Currency Code</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         <input type="text" name="axisubs[config][currency]" id="axisuba_config_currency" class="required" value="{{ all['meta'][all['ID']~'_axisubs_config_currency'] }}"/>
+                         <span class="help-text">Eg: USD, AUD</span>
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisuba_config_currency_code">Currency Symbol</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         <input type="text" name="axisubs[config][currency_code]" id="axisuba_config_currency_code" class="required" value="{{ all['meta'][all['ID']~'_axisubs_config_currency_code'] }}"/>
+                         <span class="help-text">Eg: $</span>
+                     </div>
+                 </div>
+
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisuba_config_invoice_prefix">Invoice Prefix</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         <input type="text" name="axisubs[config][invoice_prefix]" id="axisuba_config_invoice_prefix" value="{{ all['meta'][all['ID']~'_axisubs_config_invoice_prefix'] }}"/>
+                         <span class="help-text">Default value of invoice prefix is: axisubs_wp</span>
+                     </div>
+                 </div>
+             </div>
+             <div id="tax" class="tab-pane fade">
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <h3>Tax Settings</h3>
+                     </div>
+                     <div class="axisubs-fields-content">
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisub_config_enable">Enable Tax</label>
+                     </div>
+                     {% set enable_tax = item['meta'][metaPrefix~'enable_tax'] %}
+                     {% if(enable_tax == '') %}
+                         {% set enable_tax = 0 %}
+                     {% endif %}
+                     <div class="axisubs-fields-content">
+                         <input type="radio" name="axisubs[config][enable_tax]" id="axisub_config_enable1" value="1" {% if enable_tax == '1' %} checked {% endif %}>
+                         <label for="axisub_config_enable1">Yes</label>
+                         <input type="radio" name="axisubs[config][enable_tax]" id="axisub_config_enable0" value="0" {% if enable_tax == '0' %} checked {% endif %}>
+                         <label for="axisub_config_enable0">No</label>
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisub_config_tax_type">Tax type</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         <select name="axisubs[config][tax_type]" id="axisub_config_tax_type" >
+                             <option value="excluding_tax" {% if item['meta'][metaPrefix~'tax_type'] == 'excluding_tax' %} selected {% endif %}>Excluding tax</option>
+                             <option value="including_tax" {% if item['meta'][metaPrefix~'tax_type'] == 'including_tax' %} selected {% endif %}>Including tax</option>
+                         </select>
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisub_config_display_tax_info">Display tax information below the prices</label>
+                     </div>
+                     {% set display_tax_info = item['meta'][metaPrefix~'display_tax_info'] %}
+                     {% if(display_tax_info == '') %}
+                         {% set display_tax_info = 1 %}
+                     {% endif %}
+                     <div class="axisubs-fields-content">
+                         <input type="radio" name="axisubs[config][display_tax_info]" id="axisub_config_display_tax_info1" value="1" {% if display_tax_info == '1' %} checked {% endif %}>
+                         <label for="axisub_config_display_tax_info1">Yes</label>
+                         <input type="radio" name="axisubs[config][display_tax_info]" id="axisub_config_display_tax_info0" value="0" {% if display_tax_info == '0' %} checked {% endif %}>
+                         <label for="axisub_config_display_tax_info0">No</label>
+                         <span class="help-text">Example: (Incl. 19% tax). NOTE: This applies only to Plan pages.</span>
+                     </div>
+                 </div>
+             </div>
+             <div id="eu_vat" class="tab-pane fade">
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <h3>EU Vat Settings</h3>
+                     </div>
+                     <div class="axisubs-fields-content">
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisub_config_enable_eu_vat">Enable EU Vat</label>
+                     </div>
+                     {% set enable_eu_vat = item['meta'][metaPrefix~'enable_eu_vat'] %}
+                     {% if(enable_eu_vat == '') %}
+                         {% set enable_eu_vat = 0 %}
+                     {% endif %}
+                     <div class="axisubs-fields-content">
+                         <input type="radio" name="axisubs[config][enable_eu_vat]" id="axisub_config_enable_eu_vat1" value="1" {% if enable_eu_vat == '1' %} checked {% endif %}>
+                         <label for="axisub_config_enable_eu_vat1">Yes</label>
+                         <input type="radio" name="axisubs[config][enable_eu_vat]" id="axisub_config_enable_eu_vat0" value="0" {% if enable_eu_vat == '0' %} checked {% endif %}>
+                         <label for="axisub_config_enable_eu_vat0">No</label>
+                         <span class="help-text"></span>
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisub_config_no_tax_for_non_eu">No tax for Non-EU</label>
+                     </div>
+                     {% set no_tax_for_non_eu = item['meta'][metaPrefix~'no_tax_for_non_eu'] %}
+                     {% if(no_tax_for_non_eu == '') %}
+                         {% set no_tax_for_non_eu = 0 %}
+                     {% endif %}
+                     <div class="axisubs-fields-content">
+                         <input type="radio" name="axisubs[config][no_tax_for_non_eu]" id="axisub_config_no_tax_for_non_eu1" value="1" {% if no_tax_for_non_eu == '1' %} checked {% endif %}>
+                         <label for="axisub_config_no_tax_for_non_eu1">Yes</label>
+                         <input type="radio" name="axisubs[config][no_tax_for_non_eu]" id="axisub_config_no_tax_for_non_eu0" value="0" {% if no_tax_for_non_eu == '0' %} checked {% endif %}>
+                         <label for="axisub_config_no_tax_for_non_eu0">No</label>
+                         <span class="help-text">Choose yes, if you DONT want to charge tax for the Non-EU customers</span>
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisub_config_apply_digital_rules">Apply Digital Rules</label>
+                     </div>
+                     {% set apply_digital_rules = item['meta'][metaPrefix~'apply_digital_rules'] %}
+                     {% if(apply_digital_rules == '') %}
+                         {% set apply_digital_rules = 0 %}
+                     {% endif %}
+                     <div class="axisubs-fields-content">
+                         <input type="radio" name="axisubs[config][apply_digital_rules]" id="axisub_config_apply_digital_rules1" value="1" {% if apply_digital_rules == '1' %} checked {% endif %}>
+                         <label for="axisub_config_apply_digital_rules1">Yes</label>
+                         <input type="radio" name="axisubs[config][apply_digital_rules]" id="axisub_config_apply_digital_rules0" value="0" {% if apply_digital_rules == '0' %} checked {% endif %}>
+                         <label for="axisub_config_apply_digital_rules0">No</label>
+                         <span class="help-text">Choose yes, only for digital product subscriptions.</span>
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisub_config_validate_vat_number">Validate Tax Number field</label>
+                     </div>
+                     {% set validate_vat_number = item['meta'][metaPrefix~'validate_vat_number'] %}
+                     {% if(validate_vat_number == '') %}
+                         {% set validate_vat_number = 1 %}
+                     {% endif %}
+                     <div class="axisubs-fields-content">
+                         <input type="radio" name="axisubs[config][validate_vat_number]" id="axisub_config_validate_vat_number1" value="1" {% if validate_vat_number == '1' %} checked {% endif %}>
+                         <label for="axisub_config_validate_vat_number1">Yes</label>
+                         <input type="radio" name="axisubs[config][validate_vat_number]" id="axisub_config_validate_vat_number0" value="0" {% if validate_vat_number == '0' %} checked {% endif %}>
+                         <label for="axisub_config_validate_vat_number0">No</label>
+                         <span class="help-text">If yes, Tax Number field will validate and shows error before submitting.</span>
+                     </div>
+                 </div>
+             </div>
+             <div id="dashboard" class="tab-pane fade">
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <h3>Dashboard Settings</h3>
+                     </div>
+                     <div class="axisubs-fields-content">
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisub_config_plans_for_graph_report">Plans in graph</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         {% if plans|length > 0 %}
+                             <select name="axisubs[config][plans_for_graph_report][]" class="widget-hot-topics" id="axisub_config_plans_for_graph_report" multiple size="5">
+                                 {% for key, plan in plans %}
+                                     {% set planMeta = plan['meta'] %}
+                                     {% set planPrefix = plan['ID']~'_'~plan['post_type']~'_' %}
+                                     <option value="{{ plan['ID'] }}" {% if plan['ID'] in selected_plans %} selected {% endif %}>{{ planMeta[planPrefix~'name'] }}</option>
+                                 {% endfor %}
+                             </select>
+                             <span class="help-text">The selected plans will be display in graph.</span>
+                         {% else %}
+                             <span class="help-text">You do not have any active Subscription Plans yet. Please create them <a href="?page=plans-index&task=edit">Here</a>.</span>
+                         {% endif %}
+                     </div>
+                 </div>
+             </div>
+             <div id="frontend" class="tab-pane fade">
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <h3>{{ esc_html_e('Frontend Settings', 'axis-subscriptions') }}</h3>
+                     </div>
+                     <div class="axisubs-fields-content">
+                     </div>
+                 </div>
+                 <div class="axisubs-fields">
+                     <div class="axisubs-fields-label">
+                         <label for="axisub_config_subscribe_btn_text">{{ esc_html_e('Subscribe button text', 'axis-subscriptions') }}</label>
+                     </div>
+                     <div class="axisubs-fields-content">
+                         <input type="text" name="axisubs[config][subscribe_btn_text]" id="axisuba_config_subscribe_btn_text" class="" value="{{ all['meta'][all['ID']~'_axisubs_config_subscribe_btn_text'] }}"/>
+                         <span class="help-text">{{ esc_html_e('Subscribe button text in front end', 'axis-subscriptions') }}</span>
+                     </div>
+                 </div>
+             </div>
+             <div class="axisubs-fields">
+                 <div class="axisubs-fields-label">
+                     <input type="hidden" name="task" value="save"/>
+                     <input type="hidden" name="post_type" value="axisubs_config"/>
+                     <input type="hidden" name="id" value="{{ all['ID'] }}"/>
+                 </div>
+                 <div class="axisubs-fields-content">
+                     <button class="button button-primary" type="submit">Save</button>
+                     <a class="button" href="?page=dashboard-index">Cancel</a>
+                 </div>
+             </div>
+          </div>
+      </div>
+      <input type="hidden" name="site_url" value="{{ site_url }}" id="site_url"/>
+  </form>
+</div>
+{% endblock %}

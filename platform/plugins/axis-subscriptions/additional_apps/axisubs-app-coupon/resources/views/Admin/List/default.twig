@@ -1,0 +1,80 @@
+{% extends '@AxisubsAppCoupon/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs wrap">
+    <h1 class="wp-heading-inline">{{ pagetitle }}</h1>
+    <a class="page-title-action" href="?page=app-index&task=appTask&apptask=edit&p=axisubs-app-coupon">{{ esc_html_e('Add New Coupon', 'axis-subscriptions') }}</a>
+    <div class="axisubs_title_description">
+        {{ esc_html_e('Create coupons for subscription plans to promote your sales', 'axis-subscriptions') }}
+    </div>
+    <form method="post" id="axisubs_list_form" action="?page=app-index&task=view&p=axisubs-app-coupon">
+      <div class="axis-coupon">
+      <div class="axisubs-list">
+        <table class="wp-list-table widefat fixed striped coupons" width="100%">
+            <thead>
+                <tr>
+                    <th width="20%" scope="col" id="name" class="manage-column column-primary"><span>{{ esc_html_e('Name', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="code" class="manage-column column-primary"><span>{{ esc_html_e('Code', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="status" class="manage-column column-primary"><span>{{ esc_html_e('Status', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="value-type" class="manage-column column-primary"><span>{{ esc_html_e('Value type', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="value" class="manage-column column-primary"><span>{{ esc_html_e('Value', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="v-from" class="manage-column column-primary"><span>{{ esc_html_e('Valid from', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="v-to" class="manage-column column-primary"><span>{{ esc_html_e('Valid to', 'axis-subscriptions') }}</span></th>
+                    <th scope="col" id="action" class="manage-column column-primary"><span>{{ esc_html_e('Action', 'axis-subscriptions') }}</span></th>
+                </tr>
+            </thead>
+            <tbody id="the-list">
+            {% for key, item in items %}
+                {% set metaPrefix = item['ID']~'_'~item['post_type']~'_' %}
+                {% set meta = item['meta'] %}
+                <tr id="row{{ key%2 }}" class="iedit author-self status-publish format-standard hentry">
+                    <td class="title column-title has-row-actions column-primary" data-colname="Title">
+                      <div class="coupon-name">
+                        <strong>
+                          <a class="row-title" href="?page=app-index&task=appTask&apptask=edit&p=axisubs-app-coupon&id={{ item['ID'] }}">{{ meta[metaPrefix~'name'] }}</a>
+                        </strong>
+                        <span>{{ esc_html_e('ID', 'axis-subscriptions') }} : {{ item['ID'] }}</span>
+                      </div>
+                      <div class="row-actions">
+                          <button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+                      </div>
+                    </td>
+                    <td class="status column-id" data-colname="Id">{{ meta[metaPrefix~'code'] }}</td>
+                    <td class="status column-status" data-colname="Status">
+                        {% if meta[metaPrefix~'status'] == '1' %}
+                          {{ esc_html_e('Enabled', 'axis-subscriptions') }}
+                        {% else %}
+                            {{ esc_html_e('Disabled', 'axis-subscriptions') }}
+                        {% endif %}
+                    </td>
+                    <td class="status column-percent" data-colname="Percent">
+                        {% if meta[metaPrefix~'value_type'] == 'percent' %}
+                            {{ esc_html_e('Percent', 'axis-subscriptions') }}
+                        {% else %}
+                            {{ esc_html_e('Fixed', 'axis-subscriptions') }}
+                        {% endif %}
+                    </td>
+                    <td class="status column-value" data-colname="Value">{{ meta[metaPrefix~'value'] }}</td>
+                    <td class="status column-valid-from" data-colname="Valid from">{{ meta[metaPrefix~'valid_from'] }}</td>
+                    <td class="status column-valid-to" data-colname="Valid to">{{ meta[metaPrefix~'valid_to'] }}</td>
+                    <td class="status column" data-colname="action">
+                      <a class="button-primary button" href="?page=app-index&task=appTask&apptask=edit&p=axisubs-app-coupon&id={{ item['ID'] }}">{{ esc_html_e('Edit', 'axis-subscriptions') }}</a>
+                      <a class="button" href="?page=app-index&task=appTask&apptask=delete&p=axisubs-app-coupon&id={{ item['ID'] }}">{{ esc_html_e('Delete', 'axis-subscriptions') }}</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">{{ esc_html_e('No coupons available', 'axis-subscriptions') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+        {% if items|length > 5 %}
+            {{ paginationD['limitbox'] | raw }}
+            {{ paginationD['links'] | raw }}
+        {% endif %}
+     </form>
+</div>
+{% endblock %}
